@@ -1,0 +1,115 @@
+
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>AfghanRide | تاکسی آنلاین</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5f7;color:#111827;font:16px Tahoma,Arial,sans-serif}
+header{background:#111827;color:white;padding:24px 18px 35px;border-radius:0 0 25px 25px}
+.brand{font-size:25px;font-weight:bold}.brand span{color:#c7f36b}
+h1{font-size:27px;line-height:1.7}
+header p{color:#cbd5e1;line-height:1.8}
+main{max-width:600px;margin:auto;padding:15px}
+.card{background:white;border-radius:18px;padding:18px;margin-bottom:15px;box-shadow:0 3px 15px #00000008}
+h2{font-size:18px}
+label{display:block;margin:12px 0 5px;font-size:14px}
+input,select{width:100%;padding:14px;border:1px solid #ddd;border-radius:10px;font:inherit;background:white}
+.cars{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.car{padding:13px 4px;background:white;border:1px solid #ddd;border-radius:12px;text-align:center}
+.car.active{border:2px solid #111827;background:#f1f5f9}
+.car span{display:block;font-size:25px;margin-bottom:8px}
+button{font:inherit;cursor:pointer}
+.primary{width:100%;padding:15px;border:0;border-radius:12px;background:#c7f36b;font-weight:bold;margin-top:16px}
+.map{height:120px;background:linear-gradient(30deg,#dce8dc,#eef2e6);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#334155;margin:12px 0}
+.price{padding:15px;background:#f8fafc;border-radius:12px;margin-top:15px}
+#result{display:none;background:#ecfccb;padding:14px;border-radius:12px;margin-top:15px;line-height:2;overflow-wrap:anywhere}
+small{color:#64748b}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Afghan<span>Ride</span></div>
+  <h1>سفر بعدی‌ات، با چند لمس ساده.</h1>
+  <p>تاکسی آنلاین برای افغانستان و جهان</p>
+</header>
+
+<main>
+<section class="card">
+  <h2>مبدأ و مقصد سفر</h2>
+  <div class="map">🗺️ نقشه زنده در مرحله بعد اضافه می‌شود</div>
+  <label for="from">مبدأ</label>
+  <input id="from" placeholder="مثلاً مرکز شهر" value="مرکز شهر">
+  <label for="to">مقصد</label>
+  <input id="to" placeholder="مثلاً میدان هوایی">
+</section>
+
+<section class="card">
+  <h2>نوع موتر</h2>
+  <div class="cars">
+    <button class="car active" data-name="اقتصادی" data-rate="35">
+      <span>🚗</span>اقتصادی
+    </button>
+    <button class="car" data-name="کمفرته" data-rate="50">
+      <span>🚘</span>کمفرته
+    </button>
+    <button class="car" data-name="موتر بزرگ" data-rate="70">
+      <span>🚙</span>موتر بزرگ
+    </button>
+  </div>
+  <div class="price">
+    <small>نرخ نمونه به ازای هر کیلومتر</small>
+    <h2 id="rate">۳۵ واحد</h2>
+    <small>کرایه نهایی بعداً با فاصله واقعی محاسبه می‌شود.</small>
+  </div>
+  <button class="primary" id="request">درخواست سفر آزمایشی</button>
+  <div id="result"></div>
+</section>
+
+<section class="card">
+  <h2>درباره AfghanRide</h2>
+  این نسخه اولیه برای آزمایش رابط مسافر ساخته شده است.
+  <p><small>هنوز راننده واقعی، GPS زنده، پرداخت و ثبت آنلاین سفر فعال نیست.</small></p>
+</section>
+</main>
+
+<script>
+let selected=document.querySelector('.car.active');
+const rate=document.getElementById('rate');
+const result=document.getElementById('result');
+
+document.querySelectorAll('.car').forEach(button=>{
+  button.addEventListener('click',()=>{
+    document.querySelectorAll('.car').forEach(b=>b.classList.remove('active'));
+    button.classList.add('active');
+    selected=button;
+    rate.textContent=button.dataset.rate+' واحد';
+  });
+});
+
+document.getElementById('request').addEventListener('click',()=>{
+  const from=document.getElementById('from').value.trim();
+  const to=document.getElementById('to').value.trim();
+
+  if(!from||!to){
+    alert('لطفاً مبدأ و مقصد را وارد کن.');
+    return;
+  }
+  if(from===to){
+    alert('مبدأ و مقصد نباید یکسان باشند.');
+    return;
+  }
+
+  const id='AR-'+Math.random().toString(36).slice(2,8).toUpperCase();
+  result.style.display='block';
+  result.textContent='درخواست آزمایشی ثبت شد. شماره: '+id+
+    ' | مبدأ: '+from+' | مقصد: '+to+
+    ' | موتر: '+selected.dataset.name+
+    '. این درخواست هنوز به راننده واقعی ارسال نشده است.';
+});
+</script>
+</body>
+</html>
